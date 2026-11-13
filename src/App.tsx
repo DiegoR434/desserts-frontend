@@ -1,16 +1,14 @@
 import CartDrawer from "./components/CartDrawer"
 import ProductCard from "./components/ProductCard"
 import { products } from "./data/products"
-
+import Header from "./components/Header"
 
 function App() {
 
   return (
     <main className="min-h-screen bg-orange-50 px-6 py-10">
 
-      <h1 className="mb-8 text-4xl font-bold text-rose-900">
-          Desserts
-      </h1>
+      <Header />
 
       <div 
       className="mx-auto grid max-w-7xl grid-cols-1 gap-7 min-[1440px]:grid-cols-[minmax(0,1fr)_320px]">
