@@ -7,7 +7,6 @@ function QuantityStepper({ quantity }: QuantityStepperProps) {
     <div className="flex w-40 items-center justify-between rounded-full bg-red px-3 py-3 text-white">
       <button
         type="button"
-        aria-label="Disminuir cantidad"
         className="flex h-5 w-5 items-center justify-center rounded-full border border-rose-50 hover:border-red  hover:bg-rose-500"
       >
         <img
@@ -22,7 +21,6 @@ function QuantityStepper({ quantity }: QuantityStepperProps) {
 
       <button
         type="button"
-        aria-label="Aumentar cantidad"
         className="flex h-5 w-5 items-center justify-center rounded-full border border-rose-50 hover:border-red hover:bg-rose-500"
       >
         <img
