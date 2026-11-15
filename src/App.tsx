@@ -5,12 +5,21 @@ import ConfirmOrderModal from "./components/ConfirmOrderModal"
 
 import { products } from "./data/products"
 import { useState } from "react";
+import { useProducts } from "./hooks/useProducts"
 
 
 function App() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { data:products, isPending, isError } = useProducts();
 
+  if(isPending) {
+    return <p>Cargando productos...</p>
+  }
+
+  if(isError) {
+    return <p>Error al cargar los productos</p>
+  }
   return (
     <main className="min-h-screen bg-orange-50 px-6 py-10">
 
