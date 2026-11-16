@@ -6,6 +6,7 @@ import ConfirmOrderModal from "./components/ConfirmOrderModal"
 import { products } from "./data/products"
 import { useState } from "react";
 import { useProducts } from "./hooks/useProducts"
+import ProductCardSkeleton from "./components/ProductCardSkeleton"
 
 
 function App() {
@@ -13,13 +14,7 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { data:products, isPending, isError } = useProducts();
 
-  if(isPending) {
-    return <p>Cargando productos...</p>
-  }
-
-  if(isError) {
-    return <p>Error al cargar los productos</p>
-  }
+  
   return (
     <main className="min-h-screen bg-orange-50 px-6 py-10">
 
@@ -38,12 +33,29 @@ function App() {
           className="grid grid-cols-1 gap-7 md:grid-cols-2 lg:grid-cols-3"
           aria-label="Catálogo de postres"
         >
-          {products.map((product) => (
-            <ProductCard
-              key={product.name}
-              product={product}
-            />
-          ))}
+          {isPending
+    ? Array.from({ length: 9 }).map((_, index) => (
+        <ProductCardSkeleton key={index} />
+      ))
+    : isError
+      ? (
+        <p className="col-span-full text-red">
+          Ocurrió un error al cargar los productos.
+        </p>
+      )
+      : products.length === 0
+        ? (
+          <p className="col-span-full text-rose-500">
+            No se encontraron productos.
+          </p>
+        )
+        : products.map((product, index) => (
+          <ProductCard
+            key={product.id}
+            product={product}
+            isSelected={index === 0}
+          />
+        ))}
         </section>
         <CartDrawer />
       </div>
