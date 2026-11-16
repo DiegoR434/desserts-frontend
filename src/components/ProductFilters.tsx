@@ -14,7 +14,7 @@ function ProductFilters({
   onCategoryChange,
 }: ProductFiltersProps) {
   return (
-    <div className="mx-auto mb-6 flex flex-col gap-3 sm:flex-row">
+    <div className="mb-6 flex w-full flex-col gap-3 sm:flex-row">
       <input
         type="search"
         value={search}
