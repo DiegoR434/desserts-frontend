@@ -27,3 +27,8 @@ export async function getProducts(
 
   return response.data;
 }
+
+export async function getProductById(id: string): Promise<Product> {
+  const response = await api.get<Product>(`/products/${id}`);
+  return response.data;
+}
