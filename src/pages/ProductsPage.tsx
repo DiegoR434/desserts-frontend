@@ -13,14 +13,7 @@ function ProductsPage() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
 
-  const {
-    data: products,
-    isPending,
-    isError,
-  } = useProducts({
-    name: search.trim(),
-    category,
-  });
+  const { data: products, isPending, isError } = useProducts({ name: search.trim(), category });
 
   return (
     <main className="min-h-screen bg-orange-50 px-6 py-10">

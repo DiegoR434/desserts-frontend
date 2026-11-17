@@ -9,19 +9,22 @@ export interface ProductFilters{
 export async function getProducts(
   filters: ProductFilters
 ): Promise<Product[]> {
+
+  const params: Record<string, string> = {};
+
+  if (filters.name) {
+    params["name:contains"] = filters.name;
+  }
+  if (filters.category) {
+    params.category = filters.category;
+  }
+
   const [response] = await Promise.all([
     api.get<Product[]>("/products", {
-      params: {
-        ...(filters.name && {
-          "name:contains": filters.name,
-        }),
-        ...(filters.category && {
-          category: filters.category,
-        }),
-      },
+      params: params,
     }),
     new Promise<void>((resolve) =>
-      setTimeout(resolve, 1200)
+      setTimeout(resolve, 1900)
     ),
   ]);
 
