@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import type { Product } from "../types/product";
 import QuantityStepper from "./QuantityStepper";
 
@@ -28,19 +29,18 @@ function ProductCard({ product, isSelected = false }: ProductCardProps) {
             <QuantityStepper quantity={1} />
           ) : (
             <button
-          type="button"
-          className="flex items-center gap-2 whitespace-nowrap rounded-full border border-rose-400 bg-white px-6 py-3 text-sm font-semibold text-rose-900 transition-colors hover:border-orange-700 hover:text-orange-700"
-        >
-          <img
-            src="../assets/images/icon-add-to-cart.svg"
-            alt="add-to-cart"
-            className="h-5 w-5"
-          />
-          Add to Cart
-        </button>
+              type="button"
+              className="flex items-center gap-2 whitespace-nowrap rounded-full border border-rose-400 bg-white px-6 py-3 text-sm font-semibold text-rose-900 transition-colors hover:border-orange-700 hover:text-orange-700"
+            >
+              <img
+                src="../assets/images/icon-add-to-cart.svg"
+                alt="add-to-cart"
+                className="h-5 w-5"
+              />
+              Add to Cart
+            </button>
           )}
         </div>
-
       </div>
 
       {/* Información del producto */}
@@ -48,7 +48,12 @@ function ProductCard({ product, isSelected = false }: ProductCardProps) {
         <p className="font-sans text-rose-400">{product.category}</p>
 
         <h2 className="text-base font-semibold text-rose-900">
-          {product.name}
+          <Link
+            to={`/producto/${product.id}`}
+            className="hover:text-red hover:underline"
+          >
+            {product.name}
+          </Link>
         </h2>
 
         <p className="font-semibold text-red">${product.price.toFixed(2)}</p>
