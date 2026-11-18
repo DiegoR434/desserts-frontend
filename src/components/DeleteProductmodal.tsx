@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useDeleteProduct } from "../hooks/useDeleteProduct";
 import { useCartStore } from "../stores/useCartStore";
 import type { Product } from "../types/product";
@@ -18,8 +19,11 @@ export default function DeleteProductModal({
     try {
       await deleteMutation.mutateAsync(product.id);
       removeItem(product.id);
+      
+      toast.success("Producto eliminado correctamente");
       onClose();
     } catch {
+      toast.error("No se pudo eliminar el producto. Inténtalo nuevamente.");
       // El error se muestra mediante deleteMutation.isError.
     }
   };

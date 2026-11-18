@@ -5,6 +5,7 @@ import { useCreateProduct } from "../hooks/useCreateProduct";
 import type { ProductFormData } from "../schemas/productSchema";
 import type { Product } from "../types/product";
 import { useUpdateProduct } from "../hooks/useUpdateProduct";
+import { toast } from "sonner";
 
 interface ProductFormModalProps {
   product?: Product;
@@ -31,12 +32,17 @@ export default function ProductFormModal({
     try {
       if (product) {
         await updateMutation.mutateAsync({ id: product.id, data });
+
+        toast.success("Producto actualizado correctamente");
       } else {
         await createMutation.mutateAsync(data);
+
+        toast.success("Producto creado correctamente");
       }
 
       onClose();
     } catch {
+      toast.error("No se pudo guardar el producto. Inténtalo nuevamente.");
       // El error se muestra mediante createMutation.isError.
     }
   };

@@ -30,8 +30,8 @@ function ProductsPage() {
 
   const {
     data: categoriesData = [],
-    isPending: isCategoriesPending,
-    isError: isCategoriesError,
+    // isPending: isCategoriesPending,
+    // isError: isCategoriesError,
   } = useCategories();
 
   const categories = categoriesData.map((item) => item.name);
