@@ -4,6 +4,7 @@ interface ProductFiltersProps {
   categories: string[];
   onSearchChange: (value: string) => void;
   onCategoryChange: (value: string) => void;
+  onAddProduct: () => void;
 }
 
 function ProductFilters({
@@ -12,6 +13,7 @@ function ProductFilters({
   categories,
   onSearchChange,
   onCategoryChange,
+  onAddProduct
 }: ProductFiltersProps) {
   return (
     <div className="mb-6 flex w-full flex-col gap-3 sm:flex-row">
@@ -38,6 +40,15 @@ function ProductFilters({
           </option>
         ))}
       </select>
+
+      <button
+        type="button"
+        onClick={onAddProduct}
+        className="flex w-full items-center justify-center gap-2 whitespace-nowrap rounded-lg bg-red px-4 py-3 text-sm font-semibold text-white transition-colors hover:opacity-90 sm:w-auto"
+      >
+        <span aria-hidden="true" >+</span>
+        Agregar Producto
+      </button>
     </div>
   );
 }

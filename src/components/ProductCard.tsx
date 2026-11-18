@@ -1,13 +1,24 @@
 import { Link } from "react-router-dom";
 import type { Product } from "../types/product";
 import QuantityStepper from "./QuantityStepper";
+import { useCartStore } from "../stores/useCartStore";
 
 interface ProductCardProps {
   product: Product;
-  isSelected?: boolean;
+  onEdit: (product: Product) => void;
+  onDelete: (product: Product) => void;
 }
 
-function ProductCard({ product, isSelected = false }: ProductCardProps) {
+function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
+  const items = useCartStore((state) => state.items);
+  const addItem = useCartStore((state) => state.addItem);
+
+  const cartItem = items.find((item) => item.product.id === product.id);
+
+  console.log("Producto actual:", product.id);
+  console.log("Productos del carrito:", items);
+  console.log("Producto encontrado:", cartItem);
+
   return (
     <div className="flex flex-col">
       {/* Imagen */}
@@ -25,11 +36,15 @@ function ProductCard({ product, isSelected = false }: ProductCardProps) {
         {/* Botón visual del carrito */}
 
         <div className="absolute -bottom-5 left-1/2 -translate-x-1/2">
-          {isSelected ? (
-            <QuantityStepper quantity={1} />
+          {cartItem ? (
+            <QuantityStepper
+              productId={product.id}
+              quantity={cartItem.quantity}
+            />
           ) : (
             <button
               type="button"
+              onClick={() => addItem(product)}
               className="flex items-center gap-2 whitespace-nowrap rounded-full border border-rose-400 bg-white px-6 py-3 text-sm font-semibold text-rose-900 transition-colors hover:border-orange-700 hover:text-orange-700"
             >
               <img
@@ -57,6 +72,24 @@ function ProductCard({ product, isSelected = false }: ProductCardProps) {
         </h2>
 
         <p className="font-semibold text-red">${product.price.toFixed(2)}</p>
+
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => onEdit(product)}
+            className="rounded-lg border border-rose-400 px-4 py-2 text-sm font-semibold text-rose-900 transition-colors hover:border-red hover:bg-rose-50 hover:text-red"
+          >
+            Editar
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onDelete(product)}
+            className="rounded-lg border border-red px-4 py-2 text-sm font-semibold text-red transition-colors hover:bg-red hover:text-white"
+          >
+            Eliminar
+          </button>
+        </div>
       </div>
     </div>
   );
