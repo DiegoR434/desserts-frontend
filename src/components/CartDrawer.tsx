@@ -1,6 +1,10 @@
 import { useCartStore } from "../stores/useCartStore";
 
-function CartDrawer() {
+interface CartDrawerProps {
+  onConfirm: () => void;
+}
+
+function CartDrawer({ onConfirm }: CartDrawerProps) {
   const items = useCartStore((state) => state.items);
   const removeItem = useCartStore((state) => state.removeItem);
 
@@ -74,9 +78,7 @@ function CartDrawer() {
           </ul>
 
           <div className="my-6 flex items-center justify-between">
-            <span className="text-sm text-rose-900">
-              Order Total
-            </span>
+            <span className="text-sm text-rose-900">Order Total</span>
 
             <span className="text-2xl font-bold text-rose-900">
               ${orderTotal.toFixed(2)}
@@ -97,6 +99,7 @@ function CartDrawer() {
 
           <button
             type="button"
+            onClick={onConfirm}
             className="w-full rounded-full bg-red py-3 font-semibold text-white hover:opacity-90"
           >
             Confirm Order

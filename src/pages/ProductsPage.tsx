@@ -17,10 +17,7 @@ function ProductsPage() {
 
   return (
     <main className="min-h-screen bg-orange-50 px-6 py-10">
-      <button onClick={() => setIsModalOpen(true)}>
-        {" "}
-        Mostrar Confirmacion{" "}
-      </button>
+      
       {isModalOpen && (
         <ConfirmOrderModal onClose={() => setIsModalOpen(false)} />
       )}
@@ -74,7 +71,12 @@ function ProductsPage() {
           </div>
 
           {/* Columna derecha: carrito */}
-          <CartDrawer />
+          <CartDrawer 
+            onConfirm={() => setIsModalOpen(true)}
+          />
+
+
+          
         </div>
       </div>
     </main>
