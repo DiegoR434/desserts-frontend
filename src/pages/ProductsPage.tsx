@@ -10,6 +10,7 @@ import ProductFormModal from "../components/ProductFormModal";
 import type { Product } from "../types/product";
 import DeleteProductModal from "../components/DeleteProductmodal";
 import Pagination from "../components/Pagination";
+import { useCategories } from "../hooks/useCategories";
 
 function ProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -25,8 +26,16 @@ function ProductsPage() {
     isPending,
     isError,
   } = useProducts({ name: search.trim(), category, page });
-
   const products = response?.data ?? [];
+
+  const {
+    data: categoriesData = [],
+    isPending: isCategoriesPending,
+    isError: isCategoriesError,
+  } = useCategories();
+
+  const categories = categoriesData.map((item) => item.name);
+
   const totalPages = response?.pages ?? 1;
 
   const handleEditProduct = (product: Product) => {
@@ -76,17 +85,7 @@ function ProductsPage() {
             <ProductFilters
               search={search}
               category={category}
-              categories={[
-                "Waffle",
-                "Crème Brûlée",
-                "Macaron",
-                "Tiramisu",
-                "Baklava",
-                "Pie",
-                "Cake",
-                "Brownie",
-                "Panna Cotta",
-              ]}
+              categories={categories}
               onSearchChange={handleSearchChange}
               onCategoryChange={handleCategoryChange}
               onAddProduct={() => {
