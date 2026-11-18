@@ -9,6 +9,7 @@ import CartDrawer from "../components/CartDrawer";
 import ProductFormModal from "../components/ProductFormModal";
 import type { Product } from "../types/product";
 import DeleteProductModal from "../components/DeleteProductmodal";
+import Pagination from "../components/Pagination";
 
 function ProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -17,16 +18,30 @@ function ProductsPage() {
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [productToDelete, setProductToDelete] = useState<Product | null>(null);
+  const [page, setPage] = useState(1);
 
   const {
-    data: products,
+    data: response,
     isPending,
     isError,
-  } = useProducts({ name: search.trim(), category });
+  } = useProducts({ name: search.trim(), category, page });
+
+  const products = response?.data ?? [];
+  const totalPages = response?.pages ?? 1;
 
   const handleEditProduct = (product: Product) => {
     setSelectedProduct(product);
     setIsProductModalOpen(true);
+  };
+
+  const handleSearchChange = (value: string) => {
+    setSearch(value);
+    setPage(1); // Reset page to 1 when search changes
+  };
+
+  const handleCategoryChange = (value: string) => {
+    setCategory(value);
+    setPage(1); // Reset page to 1 when category changes
   };
 
   return (
@@ -72,8 +87,8 @@ function ProductsPage() {
                 "Brownie",
                 "Panna Cotta",
               ]}
-              onSearchChange={setSearch}
-              onCategoryChange={setCategory}
+              onSearchChange={handleSearchChange}
+              onCategoryChange={handleCategoryChange}
               onAddProduct={() => {
                 setSelectedProduct(null);
                 setIsProductModalOpen(true);
@@ -85,7 +100,7 @@ function ProductsPage() {
               aria-label="Catálogo de postres"
             >
               {isPending ? (
-                Array.from({ length: 9 }).map((_, index) => (
+                Array.from({ length: 8 }).map((_, index) => (
                   <ProductCardSkeleton key={index} />
                 ))
               ) : isError ? (
@@ -107,6 +122,14 @@ function ProductsPage() {
                 ))
               )}
             </section>
+
+            {!isPending && !isError && (
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+              />
+            )}
           </div>
 
           {/* Columna derecha: carrito */}
