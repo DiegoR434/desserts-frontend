@@ -5,9 +5,10 @@ import { useCartStore } from "../stores/useCartStore";
 
 interface ProductCardProps {
   product: Product;
+  onEdit: (product: Product) => void;
 }
 
-function ProductCard({ product }: ProductCardProps) {
+function ProductCard({ product, onEdit }: ProductCardProps) {
   const items = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
 
@@ -70,6 +71,14 @@ function ProductCard({ product }: ProductCardProps) {
         </h2>
 
         <p className="font-semibold text-red">${product.price.toFixed(2)}</p>
+
+        <button
+          type="button"
+          onClick={() => onEdit(product)}
+          className="mt-2 text-sm font-semibold text-red hover:underline"
+        >
+          Editar producto
+        </button>
       </div>
     </div>
   );

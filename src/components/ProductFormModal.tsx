@@ -1,18 +1,26 @@
-
 import { useEffect, useRef } from "react";
 
 import ProductForm from "./ProductForm";
 import { useCreateProduct } from "../hooks/useCreateProduct";
 import type { ProductFormData } from "../schemas/productSchema";
+import type { Product } from "../types/product";
+import { useUpdateProduct } from "../hooks/useUpdateProduct";
 
 interface ProductFormModalProps {
+  product?: Product;
   onClose: () => void;
 }
 
 export default function ProductFormModal({
+  product,
   onClose,
 }: ProductFormModalProps) {
   const createMutation = useCreateProduct();
+  const updateMutation = useUpdateProduct();
+
+  const isEditing = Boolean(product);
+  const isPending = createMutation.isPending || updateMutation.isPending;
+
   const modalRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -21,7 +29,12 @@ export default function ProductFormModal({
 
   const handleSubmit = async (data: ProductFormData) => {
     try {
-      await createMutation.mutateAsync(data);
+      if (product) {
+        await updateMutation.mutateAsync({ id: product.id, data });
+      } else {
+        await createMutation.mutateAsync(data);
+      }
+
       onClose();
     } catch {
       // El error se muestra mediante createMutation.isError.
@@ -37,10 +50,7 @@ export default function ProductFormModal({
         aria-modal="true"
         aria-labelledby="product-form-title"
         onKeyDown={(event) => {
-          if (
-            event.key === "Escape" &&
-            !createMutation.isPending
-          ) {
+          if (event.key === "Escape" && !createMutation.isPending) {
             onClose();
           }
         }}
@@ -51,7 +61,7 @@ export default function ProductFormModal({
             id="product-form-title"
             className="text-2xl font-bold text-rose-900"
           >
-            Agregar producto
+            {isEditing ? "Agregar producto" : "Editar producto"}
           </h2>
 
           <button
@@ -66,14 +76,16 @@ export default function ProductFormModal({
         </div>
 
         <ProductForm
-          mode="create"
+          key={product?.id ?? "create"}
+          mode={isEditing ? "edit" : "create"}
+          initialValues={product}
           onSubmit={handleSubmit}
-          isSubmitting={createMutation.isPending}
+          isSubmitting={isPending}
         />
 
-        {createMutation.isError && (
+        {(createMutation.isError || updateMutation.isError) && (
           <p role="alert" className="mt-4 text-sm text-red">
-            No se pudo crear el producto. Inténtalo nuevamente.
+            No se pudo guardar el producto. Inténtalo nuevamente.
           </p>
         )}
       </div>

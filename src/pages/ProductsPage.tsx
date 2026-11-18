@@ -7,11 +7,14 @@ import ProductCardSkeleton from "../components/ProductCardSkeleton";
 import ProductCard from "../components/ProductCard";
 import CartDrawer from "../components/CartDrawer";
 import ProductFormModal from "../components/ProductFormModal";
+import type { Product } from "../types/product";
 
 function ProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("");
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const {
     data: products,
@@ -19,7 +22,10 @@ function ProductsPage() {
     isError,
   } = useProducts({ name: search.trim(), category });
 
-  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const handleEditProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsProductModalOpen(true);
+  };
 
   return (
     <main className="min-h-screen bg-orange-50 px-6 py-10">
@@ -28,7 +34,13 @@ function ProductsPage() {
       )}
 
       {isProductModalOpen && (
-        <ProductFormModal onClose={() => setIsProductModalOpen(false)} />
+        <ProductFormModal
+          product={selectedProduct ?? undefined}
+          onClose={() => {
+            setIsProductModalOpen(false);
+            setSelectedProduct(null);
+          }}
+        />
       )}
 
       <Header />
@@ -53,7 +65,10 @@ function ProductsPage() {
               ]}
               onSearchChange={setSearch}
               onCategoryChange={setCategory}
-              onAddProduct={() => setIsProductModalOpen(true)}
+              onAddProduct={() => {
+                setSelectedProduct(null);
+                setIsProductModalOpen(true);
+              }}
             />
 
             <section
@@ -74,7 +89,11 @@ function ProductsPage() {
                 </p>
               ) : (
                 products.map((product) => (
-                  <ProductCard key={product.id} product={product} />
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onEdit={handleEditProduct}
+                  />
                 ))
               )}
             </section>
