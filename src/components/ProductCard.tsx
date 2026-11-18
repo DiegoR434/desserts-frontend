@@ -6,9 +6,10 @@ import { useCartStore } from "../stores/useCartStore";
 interface ProductCardProps {
   product: Product;
   onEdit: (product: Product) => void;
+  onDelete: (product: Product) => void;
 }
 
-function ProductCard({ product, onEdit }: ProductCardProps) {
+function ProductCard({ product, onEdit, onDelete }: ProductCardProps) {
   const items = useCartStore((state) => state.items);
   const addItem = useCartStore((state) => state.addItem);
 
@@ -72,13 +73,23 @@ function ProductCard({ product, onEdit }: ProductCardProps) {
 
         <p className="font-semibold text-red">${product.price.toFixed(2)}</p>
 
-        <button
-          type="button"
-          onClick={() => onEdit(product)}
-          className="mt-2 text-sm font-semibold text-red hover:underline"
-        >
-          Editar producto
-        </button>
+        <div className="mt-3 flex flex-wrap gap-2">
+          <button
+            type="button"
+            onClick={() => onEdit(product)}
+            className="rounded-lg border border-rose-400 px-4 py-2 text-sm font-semibold text-rose-900 transition-colors hover:border-red hover:bg-rose-50 hover:text-red"
+          >
+            Editar
+          </button>
+
+          <button
+            type="button"
+            onClick={() => onDelete(product)}
+            className="rounded-lg border border-red px-4 py-2 text-sm font-semibold text-red transition-colors hover:bg-red hover:text-white"
+          >
+            Eliminar
+          </button>
+        </div>
       </div>
     </div>
   );

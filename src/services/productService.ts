@@ -46,6 +46,10 @@ export async function updateProduct(
   id: string,
   data: ProductFormData): Promise<Product> {
     const response = await api.patch<Product>(`/products/${id}`, data);
-    
+
     return response.data;
+}
+
+export async function deleteProduct(id: string): Promise<void> {
+  await api.delete(`/products/${id}`);
 }

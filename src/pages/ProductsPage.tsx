@@ -8,6 +8,7 @@ import ProductCard from "../components/ProductCard";
 import CartDrawer from "../components/CartDrawer";
 import ProductFormModal from "../components/ProductFormModal";
 import type { Product } from "../types/product";
+import DeleteProductModal from "../components/DeleteProductmodal";
 
 function ProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,6 +16,7 @@ function ProductsPage() {
   const [category, setCategory] = useState("");
   const [isProductModalOpen, setIsProductModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [productToDelete, setProductToDelete] = useState<Product | null>(null);
 
   const {
     data: products,
@@ -40,6 +42,13 @@ function ProductsPage() {
             setIsProductModalOpen(false);
             setSelectedProduct(null);
           }}
+        />
+      )}
+
+      {productToDelete && (
+        <DeleteProductModal
+          product={productToDelete}
+          onClose={() => setProductToDelete(null)}
         />
       )}
 
@@ -93,6 +102,7 @@ function ProductsPage() {
                     key={product.id}
                     product={product}
                     onEdit={handleEditProduct}
+                    onDelete={setProductToDelete}
                   />
                 ))
               )}
