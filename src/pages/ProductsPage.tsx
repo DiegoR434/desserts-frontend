@@ -6,7 +6,7 @@ import ProductFilters from "../components/ProductFilters";
 import ProductCardSkeleton from "../components/ProductCardSkeleton";
 import ProductCard from "../components/ProductCard";
 import CartDrawer from "../components/CartDrawer";
-import { useNavigate } from "react-router-dom";
+import ProductFormModal from "../components/ProductFormModal";
 
 function ProductsPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -19,11 +19,16 @@ function ProductsPage() {
     isError,
   } = useProducts({ name: search.trim(), category });
 
-  const navigate = useNavigate();
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+
   return (
     <main className="min-h-screen bg-orange-50 px-6 py-10">
       {isModalOpen && (
         <ConfirmOrderModal onClose={() => setIsModalOpen(false)} />
+      )}
+
+      {isProductModalOpen && (
+        <ProductFormModal onClose={() => setIsProductModalOpen(false)} />
       )}
 
       <Header />
@@ -48,7 +53,7 @@ function ProductsPage() {
               ]}
               onSearchChange={setSearch}
               onCategoryChange={setCategory}
-              onAddProduct={() => navigate("/add-product")}
+              onAddProduct={() => setIsProductModalOpen(true)}
             />
 
             <section

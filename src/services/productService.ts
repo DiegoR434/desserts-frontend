@@ -1,3 +1,4 @@
+import type { ProductFormData } from "../schemas/productSchema";
 import type { Product } from "../types/product";
 import { api } from "./api";
 
@@ -33,5 +34,10 @@ export async function getProducts(
 
 export async function getProductById(id: string): Promise<Product> {
   const response = await api.get<Product>(`/products/${id}`);
+  return response.data;
+}
+
+export async function createProduct(data: ProductFormData): Promise<Product> {
+  const response = await api.post<Product>("/products", data);
   return response.data;
 }
