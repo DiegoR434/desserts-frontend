@@ -1,13 +1,22 @@
 import { Link } from "react-router-dom";
 import type { Product } from "../types/product";
 import QuantityStepper from "./QuantityStepper";
+import { useCartStore } from "../stores/useCartStore";
 
 interface ProductCardProps {
   product: Product;
-  isSelected?: boolean;
 }
 
-function ProductCard({ product, isSelected = false }: ProductCardProps) {
+function ProductCard({ product }: ProductCardProps) {
+  const items = useCartStore((state) => state.items);
+  const addItem = useCartStore((state) => state.addItem);
+
+  const cartItem = items.find((item) => item.product.id === product.id);
+
+  console.log("Producto actual:", product.id);
+  console.log("Productos del carrito:", items);
+  console.log("Producto encontrado:", cartItem);
+
   return (
     <div className="flex flex-col">
       {/* Imagen */}
@@ -25,11 +34,15 @@ function ProductCard({ product, isSelected = false }: ProductCardProps) {
         {/* Botón visual del carrito */}
 
         <div className="absolute -bottom-5 left-1/2 -translate-x-1/2">
-          {isSelected ? (
-            <QuantityStepper quantity={1} />
+          {cartItem ? (
+            <QuantityStepper
+              productId={product.id}
+              quantity={cartItem.quantity}
+            />
           ) : (
             <button
               type="button"
+              onClick={() => addItem(product)}
               className="flex items-center gap-2 whitespace-nowrap rounded-full border border-rose-400 bg-white px-6 py-3 text-sm font-semibold text-rose-900 transition-colors hover:border-orange-700 hover:text-orange-700"
             >
               <img
